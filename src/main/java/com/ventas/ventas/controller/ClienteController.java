@@ -42,9 +42,13 @@ public class ClienteController {
 				.map( cli -> ResponseEntity.ok(clienteService.update(cliente)))
 				.orElseGet( () -> ResponseEntity.notFound().build());
 	}
-	public ResponseEntity<Cliente> delete(Integer id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Cliente> delete(@PathVariable("id") Integer id){
 		return clienteService.findById(id)
-				.map( cli -> clienteService.delete(id) )
-				.orElseGet( () -> ResponseEntity.notFound().build());
+				.map( cli -> {
+					clienteService.delete(id);
+					return ResponseEntity.ok(cli);
+				}).orElseGet( () -> ResponseEntity.notFound().build());
+				
 	}
 }
